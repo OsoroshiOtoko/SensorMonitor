@@ -33,14 +33,14 @@ namespace SensorMonitor
         {
             switch (item.ItemId)
             {
-                case Resource.Id.navigation_home:
-                    textMessage.SetText(Resource.String.title_home);
+                case Resource.Id.navigation_sensors:
+                    textMessage.SetText(Resource.String.title_sensors);
                     return true;
-                case Resource.Id.navigation_dashboard:
-                    textMessage.SetText(Resource.String.title_dashboard);
+                case Resource.Id.navigation_favorites:
+                    textMessage.SetText(Resource.String.title_favorites);
                     return true;
-                case Resource.Id.navigation_notifications:
-                    textMessage.SetText(Resource.String.title_notifications);
+                case Resource.Id.navigation_settings:
+                    textMessage.SetText(Resource.String.title_settings);
                     return true;
             }
             return false;
