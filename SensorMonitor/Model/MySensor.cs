@@ -12,69 +12,76 @@ using System.Text;
 
 namespace SensorMonitor.Model
 {
-    internal class MySensor
+    public class MySensor
     {
-        private string _name { get; set; }
-        private SensorType _type { get; set; }
-        private bool _isFavorite { get; set; }
+        public string name { get; set; }
+        public SensorType type { get; set; }
+        public bool favorite { get; set; }
 
-        public MySensor(String name, SensorType type, bool fav)
+        public MySensor()
         {
-
-            _name = name;
-            _type = type;
-            _isFavorite = fav;
+            name = "name";
+            type = default;
+            favorite = false;
         }
 
-        public MySensor(String name, SensorType type)
+        public MySensor(string _name, SensorType _type, bool _fav)
         {
 
-            _name = name;
-            _type = type;
-            _isFavorite = false;
+            name = _name;
+            type = _type;
+            favorite = _fav;
         }
 
-        public MySensor(String name)
+        public MySensor(string _name, SensorType _type)
         {
 
-            _name = name;
-            _type = default;
-            _isFavorite = false;
+            name = _name;
+            type = _type;
+            favorite = false;
         }
 
-        public String getName()
+        public MySensor(string _name)
         {
-            return _name;
+
+            name = _name;
+            type = default;
+            favorite = false;
         }
 
-        public void setName(String name)
+        public string getName()
         {
-            _name = name;
+            return name;
+        }
+
+        public void setName(string _name)
+        {
+            name = _name;
         }
 
         public SensorType getType()
         {
-            return _type;
+            return type;
         }
 
-        public void setType(SensorType type)
+        public void setType(SensorType _type)
         {
-            _type = type;
+            type = _type;
         }
 
         public bool isFavorite()
         {
-            return _isFavorite;
+            return favorite;
         }
 
         public void addFavorite()
         {
-            _isFavorite = true;
+            favorite = true;
         }
 
         public void removeFavorite()
         {
-            _isFavorite = false;
+            favorite = false;
         }
     }
 }

@@ -7,26 +7,44 @@ using Android.Views;
 using Android.Widget;
 using AndroidX.Core.Content;
 using AndroidX.RecyclerView.Widget;
+using SensorMonitor.App;
 using SensorMonitor.Fragments;
 using SensorMonitor.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Android.Views.View;
+using static AndroidX.RecyclerView.Widget.RecyclerView;
 
 namespace SensorMonitor.Adapters
 {
     internal class SensorListAdapter : RecyclerView.Adapter
     {
         private List<MySensor> mySensors = new List<MySensor>();
-        //private List<Sensor> sensors;  
 
-        public SensorListAdapter(List<Sensor> _sensors)
+        public event EventHandler<int> ItemClick;
+
+        public SensorListAdapter(List<MySensor> _mySensors)
         {
-            foreach (var sensor in _sensors)
-            {
-                mySensors.Add(new MySensor(sensor.Name, sensor.Type));
-            }
+            mySensors = _mySensors; 
+            
+        }
+
+
+        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+        {
+            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.list_sensor, parent, false);
+            return new SensorViewHolder(itemView, OnClick);
+        }
+
+        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        {
+            MySensor mySensor = mySensors[position];
+            SensorViewHolder viewHolder = holder as SensorViewHolder;
+            viewHolder.nameView.Text = mySensor.getName();
+
+            
         }
 
         public override int ItemCount
@@ -34,25 +52,22 @@ namespace SensorMonitor.Adapters
             get { return mySensors.Count; }
         }
 
-        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+        void OnClick(int position)
         {
-            View itemView = LayoutInflater.From(parent.Context).Inflate(Resource.Layout.list_sensor, parent, false);
-            return new SensorViewHolder(itemView);
+            if (ItemClick != null)
+                ItemClick(this, position);
         }
 
-        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            SensorViewHolder viewHolder = holder as SensorViewHolder;
-            viewHolder.Name.Text = mySensors[position].getName();
-        }
 
         public class SensorViewHolder : RecyclerView.ViewHolder
         {
-            public TextView Name { get; set; }
+            public TextView nameView { get; set; }
 
-            public SensorViewHolder(View itemView) : base(itemView)
+            public SensorViewHolder(View itemView, Action<int> listener) : base(itemView)
             {
-                Name = itemView.FindViewById<TextView>(Resource.Id.name);
+                nameView = itemView.FindViewById<TextView>(Resource.Id.name);
+
+                itemView.Click += (sender, e) => listener(LayoutPosition);
             }
         }
 
@@ -91,10 +106,17 @@ namespace SensorMonitor.Adapters
             NotifyDataSetChanged();
         }
 
+        public List<MySensor> GetList() 
+        {
+            return mySensors;
+        }
+
         public void ClearList()
         {
             mySensors.Clear();
             NotifyDataSetChanged();
         }
+
+        
     }
 }

@@ -2,7 +2,8 @@
     <string name="app_name">SensorMonitor</string>
     <string name="title_sensors">Sensors</string>
     <string name="title_favorites">Favorites</string>
-    <string name="title_settings">Settings</string>
+    <string name="title_connection">Connection</string>
+	<string name="title_buttonConnect">Connect</string>
 	<string name="title_back">Back</string>
 	<string name="test">TestMessedge</string>
 </resources>

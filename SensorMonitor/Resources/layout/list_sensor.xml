@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="25dp"
         android:textAlignment="center"
-        android:text="Sensor"
+        android:text="@string/test"
         android:textSize="20sp"
         android:background="#4682B4"
         android:textColor="?android:attr/windowBackground"/>

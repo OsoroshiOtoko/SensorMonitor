@@ -16,23 +16,22 @@ using System.Reflection.Emit;
 
 namespace SensorMonitor.Services
 {
-    public class SensorDataService : Application
+    public class SensorData : Application
     {
 
         private List<Sensor> sensors;
         private SensorManager sensorManager;
         private Sensor sensor;
+
         
-        public SensorDataService(Context context) 
+        public SensorData() 
         {
-            sensorManager = context.GetSystemService(SensorService) as SensorManager;
+            sensorManager = Context.GetSystemService(SensorService) as SensorManager;
+            
         }
 
 
-        public List<Sensor> GetSensors()
-        {
-            return new List<Sensor>(sensorManager.GetSensorList(SensorType.All));
-        }
+        public List<Sensor> GetSensors() => new List<Sensor>(sensorManager.GetSensorList(SensorType.All));
 
 
     }

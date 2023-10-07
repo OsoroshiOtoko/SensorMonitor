@@ -19,19 +19,15 @@ using Android.Hardware;
 
 namespace SensorMonitor.Fragments
 {
-    public class SensorsFragment : Fragment
-    {
-        private List<MySensor> mySensors;
-        private RecyclerView recyclerView;
-        private SensorListAdapter adapter;
-        private EventHandler<int> onItemClick;
+    public class ConnectionFragment : Fragment
+    {          
 
 
-        public SensorsFragment(List<MySensor> _mySensors, EventHandler<int> _onItemClick)
+        public ConnectionFragment() 
         {
-            mySensors = _mySensors;
-            onItemClick = _onItemClick;
+            
         }
+
 
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -42,11 +38,7 @@ namespace SensorMonitor.Fragments
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
 
-            View view = inflater.Inflate(Resource.Layout.fragment_sensors, container, false);
-            recyclerView = view.FindViewById<RecyclerView>(Resource.Id.list);
-            adapter = new SensorListAdapter(mySensors);
-            adapter.ItemClick += onItemClick;
-            recyclerView.SetAdapter(adapter);
+            View view = inflater.Inflate(Resource.Layout.fragment_connection, container, false);            
 
             return view;
         }
