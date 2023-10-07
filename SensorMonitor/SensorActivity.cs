@@ -12,7 +12,7 @@ using System.Text;
 
 namespace SensorMonitor
 {
-    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = false)]
     internal class SensorActivity : AppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
