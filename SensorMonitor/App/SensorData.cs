@@ -33,6 +33,8 @@ namespace SensorMonitor.Services
 
         public List<Sensor> GetSensors() => new List<Sensor>(sensorManager.GetSensorList(SensorType.All));
 
+        public Sensor GetSensor(SensorType type) => sensorManager.GetDefaultSensor(type);
+
 
     }
 }

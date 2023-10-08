@@ -75,21 +75,22 @@ namespace SensorMonitor.Adapters
         public void AddItem(MySensor _mySensor)
         {
             mySensors.Add(_mySensor);
-            NotifyDataSetChanged();
+            NotifyItemInserted(ItemCount);
         }
 
         public void AddItem(Sensor _sensor)
         {
             mySensors.Add(new MySensor(_sensor.Name, _sensor.Type));
-            NotifyDataSetChanged();
+            NotifyItemInserted(ItemCount);
         }
 
         public void RemoveItem(int index)
         {
             mySensors.RemoveAt(index);
-            NotifyDataSetChanged();
+            NotifyItemRemoved(index);
         }
 
+        public MySensor GetItem(int index) => mySensors[index];
 
         public void SetList(List<MySensor> _mySensors)
         {
@@ -106,10 +107,8 @@ namespace SensorMonitor.Adapters
             NotifyDataSetChanged();
         }
 
-        public List<MySensor> GetList() 
-        {
-            return mySensors;
-        }
+        public List<MySensor> GetList() => mySensors;
+        
 
         public void ClearList()
         {

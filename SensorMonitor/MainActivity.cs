@@ -14,6 +14,7 @@ using Android.Widget;
 using SensorMonitor.App;
 using SensorMonitor.Adapters;
 using Android.Hardware;
+using System;
 
 namespace SensorMonitor
 {
@@ -41,10 +42,7 @@ namespace SensorMonitor
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            
-      
             SupportFragmentManager.BeginTransaction().Replace(Resource.Id.main_fragment, new SensorsFragment(LocalData.mySensorList, OnItemClick)).Commit();
-
 
 
             BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.navigation);
@@ -66,19 +64,14 @@ namespace SensorMonitor
             localData.saveData();
         }
 
-        protected override void OnStop()
-        {
-            base.OnStop();
+        
 
-            localData.saveData();
-        }
-
-        protected override void OnDestroy()
+        /*protected override void OnDestroy()
         {
             base.OnDestroy();
 
             localData.saveData();
-        }
+        }*/
  
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -91,8 +84,14 @@ namespace SensorMonitor
 
         void OnItemClick(object sender, int position)
         {
-            Toast.MakeText(Application.Context, "  ID = " + position, ToastLength.Short).Show();
-        }
+            SensorListAdapter adapter = sender as SensorListAdapter;
+            MySensor mySensor = adapter.GetItem(position);
+            //Toast.MakeText(Application.Context, "ID = " + position + "  Name = " + mySensor.getName(), ToastLength.Short).Show();
+
+            Intent intent = new Intent(this, typeof(SensorActivity));
+            intent.PutExtra("sensor", mySensor.getName());
+            StartActivity(intent);
+    }
 
 
         public bool OnNavigationItemSelected(IMenuItem item)
