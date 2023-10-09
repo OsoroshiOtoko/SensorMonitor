@@ -4,10 +4,10 @@
   
   <item
        android:id="@+id/menu_favorite"
-       android:icon="@drawable/icon_favorites"
+       
+       android:icon="@drawable/icon_favorites2"
        android:title="@string/title_favorites"
-       app:showAsAction="always"
-	   app:iconTint="@color/windowBackground"/>
+       app:showAsAction="always"/>
 
   
 </menu>

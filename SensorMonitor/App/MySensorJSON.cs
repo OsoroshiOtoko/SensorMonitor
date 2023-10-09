@@ -43,7 +43,7 @@ namespace SensorMonitor
                 }
 
                 //toast?.Invoke("json write");
-                Toast.MakeText(Context, "json write", ToastLength.Short).Show();
+                //Toast.MakeText(Context, "json write", ToastLength.Short).Show();
             } 
             catch (IOException ex)
             {
@@ -64,7 +64,7 @@ namespace SensorMonitor
                         //json = data;
                         List<MySensor> mySensors = JsonSerializer.Deserialize<List<MySensor>>(data);
                         //toast?.Invoke("json read");
-                        Toast.MakeText(Context, "json read", ToastLength.Short).Show();
+                        //Toast.MakeText(Context, "json read", ToastLength.Short).Show();
 
                         return mySensors;
                     }

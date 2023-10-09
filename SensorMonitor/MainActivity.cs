@@ -61,17 +61,17 @@ namespace SensorMonitor
         {
             base.OnPause();
 
-            localData.saveData();
+            //localData.saveData();
         }
 
         
 
-        /*protected override void OnDestroy()
+        protected override void OnDestroy()
         {
             base.OnDestroy();
 
             localData.saveData();
-        }*/
+        }
  
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)

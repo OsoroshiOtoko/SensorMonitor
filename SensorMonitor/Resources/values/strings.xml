@@ -4,6 +4,6 @@
     <string name="title_favorites">Favorites</string>
     <string name="title_connection">Connection</string>
 	<string name="title_buttonConnect">Connect</string>
-	<string name="title_back">Back</string>
+	<string name="tittle_null">NON</string>
 	<string name="test">TestMessedge</string>
 </resources>

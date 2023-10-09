@@ -1,30 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    
+
 
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/Toolbar"/>
 
-    <TextView
-        android:id="@+id/typeSensor"
-        android:text="@string/test"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:minWidth="25px"
-        android:minHeight="25px"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        android:textSize="21sp"
-        android:textColor="@color/textBlack"
-        android:gravity="center"/> 
-    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="16dp">
 
+        <TextView
+            android:id="@+id/typeSensor"
+            android:text="@string/tittle_null"
+            style="@style/SensorActivity"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/versionSensor"
+            android:text="@string/tittle_null"
+            style="@style/SensorActivity"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="20dp">
+
+            <TextView
+                android:id="@+id/textToPc"
+                android:text="Transfer to PC"
+                style="@style/SensorActivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:layout_marginRight="20dp"/>
+
+            <ToggleButton
+                android:id="@+id/buttonTransfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/valuesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            
+
+            </LinearLayout>
+        </LinearLayout>
+</LinearLayout>

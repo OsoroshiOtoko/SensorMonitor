@@ -2,6 +2,7 @@
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
 		<item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+
 		<item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -14,16 +15,27 @@
 	</style>
 	
 	<style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-		<item name="colorPrimary">@color/textPrimary</item>
-		
+		<item name="colorPrimary">@color/textPrimary</item>		
+	</style>
+
+	<style name="Widget.Button.Toggle" parent="android:Widget">
+		<item name="android:background">@color/colorPrimary</item>
+		<item name="android:textOn">ON</item>
+		<item name="android:textOff">OFF</item>
+		<item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
 	</style>
 
 	<style name="Toolbar">
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">?attr/actionBarSize</item>
 		<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-		<item name="android:background">@color/colorPrimary</item>
-		
+		<item name="android:background">@color/colorPrimary</item>		
+	</style>
+
+	<style name="SensorActivity">
+		<item name="android:textSize">21sp</item>
+		<item name="android:textColor">@color/textBlack</item>
+		<item name="android:gravity">center</item>
 	</style>
 	
 </resources>

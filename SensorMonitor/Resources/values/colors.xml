@@ -6,4 +6,5 @@
 	<color name="windowBackground">#f2f3f4</color>
 	<color name="textPrimary">#FFFFFF</color>
 	<color name="textBlack">#000000</color>
+	<color name="isFavorite">#FFFF00</color>
 </resources>

@@ -67,7 +67,7 @@
     <Compile Include="App\LocalData.cs" />
     <Compile Include="Fragments\ConnectionFragment.cs" />
     <Compile Include="Fragments\SensorsFragment.cs" />
-    <Compile Include="MySensorJSON.cs" />
+    <Compile Include="App\MySensorJSON.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Adapters\SensorListAdapter.cs" />
     <Compile Include="Model\MySensor.cs" />
@@ -123,9 +123,6 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon_settings.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon_favorites.png" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +164,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\menu\toolbar_menu.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_favorites2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_connection.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
