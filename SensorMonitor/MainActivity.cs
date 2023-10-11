@@ -6,7 +6,6 @@ using AndroidX.AppCompat.App;
 using Google.Android.Material.BottomNavigation;
 using SensorMonitor.Fragments;
 using SensorMonitor.Model;
-using SensorMonitor.Services;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
@@ -15,25 +14,24 @@ using SensorMonitor.App;
 using SensorMonitor.Adapters;
 using Android.Hardware;
 using System;
+using System.Net.Sockets;
 
 namespace SensorMonitor
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity, BottomNavigationView.IOnItemSelectedListener
     {
-        SensorsFragment sensorsFragment;
-        ConnectionFragment connectionFragment;
-        SensorData sensorService;
+        Connect connect;
+        EditText editIp, editPort;
+        Button btnConnect;
+        TcpClient client;
         MySensorJSON JSON = new MySensorJSON();
-        //List<MySensor> mySensors = new List<MySensor>();
         LocalData localData = new LocalData();
         
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            sensorService = new SensorData();
 
             //JSON.RegisterToast(ActivityToast);
 
@@ -61,7 +59,7 @@ namespace SensorMonitor
         {
             base.OnPause();
 
-            //localData.saveData();
+            localData.saveData();
         }
 
         
@@ -73,6 +71,7 @@ namespace SensorMonitor
             localData.saveData();
         }
  
+        
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

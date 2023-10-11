@@ -13,8 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SensorMonitor;
-using SensorMonitor.Services;
-using Android.Hardware;
 
 
 namespace SensorMonitor.Fragments
@@ -49,11 +47,6 @@ namespace SensorMonitor.Fragments
             recyclerView.SetAdapter(adapter);
 
             return view;
-        }
-        
-
-
-
-        
+        }     
     }
 }

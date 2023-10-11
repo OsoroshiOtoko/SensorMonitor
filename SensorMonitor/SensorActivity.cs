@@ -15,12 +15,13 @@ using AndroidX.Core.View;
 using SensorMonitor.App;
 using SensorMonitor.Fragments;
 using SensorMonitor.Model;
-using SensorMonitor.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using Xamarin.Essentials;
 using static Java.Util.Jar.Attributes;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
@@ -31,15 +32,16 @@ namespace SensorMonitor
     internal class SensorActivity : AppCompatActivity, ISensorEventListener
     {
         private string nameInit;
+        private bool transmit = false;
         //private float[] values;
         private int[] id;
 
-        private TextView type, version, value;
+        private TextView type, version, power;
+        private ToggleButton button;
         private Drawable imgFavorite;
         private MySensor mySensor;
         private SensorManager sensorManager;
         private Sensor sensor;
-        private SensorData sensorData = new SensorData();
         private LocalData localData = new LocalData();
         
 
@@ -57,7 +59,7 @@ namespace SensorMonitor
                 sensor = sensorManager.GetDefaultSensor(mySensor.getType());
             }
 
-            if (sensor != null) sensorManager.RegisterListener(this, sensor, SensorDelay.Normal);
+            
 
            
 
@@ -70,8 +72,8 @@ namespace SensorMonitor
         protected override void OnResume()
         {
             base.OnResume();
-         
-            
+
+            if (sensor != null) sensorManager.RegisterListener(this, sensor, SensorDelay.Normal);
         }
 
         protected override void OnPause()
@@ -96,7 +98,18 @@ namespace SensorMonitor
             type.Text = "Sensor Type: " + sensor.StringType;
 
             version = FindViewById<TextView>(Resource.Id.versionSensor);
-            version.Text = "Sensor Version: " + sensor.Version.ToString();            
+            version.Text = "Sensor Version: " + sensor.Version.ToString();
+
+            power = FindViewById<TextView>(Resource.Id.powerSensor);
+            power.Text = "Sensor Power: " + sensor.Power.ToString();
+
+            button = FindViewById<ToggleButton>(Resource.Id.buttonTransfer);
+            if (!Connection.isConnected) button.Enabled = false;
+            button.Click += (sender, ev) => 
+            {
+                ToggleButton btn = sender as ToggleButton;
+                transmit = btn.Checked;
+            };          
         }
         
         public void InitValueView(int count)
@@ -118,6 +131,8 @@ namespace SensorMonitor
                 i++;
             }
         }
+
+        
 
         public override bool OnPrepareOptionsMenu(IMenu menu)
         {
@@ -171,17 +186,36 @@ namespace SensorMonitor
         public void OnSensorChanged(SensorEvent ev)
         {
             TextView textView;
-            if (id == null) InitValueView(ev.Values.Count);
+            var valuesCount = ev.Values.Count > 4 ? 4 : ev.Values.Count;
+            if (id == null) InitValueView(valuesCount);
 
             int i = 0;
-            
-            foreach(var val in ev.Values)
+            float[] values = new float[valuesCount];
+            while (i < valuesCount)
             {
+                float val;
                 textView = FindViewById<TextView>(id[i]);
+                val = ev.Values[i];
                 textView.Text = val.ToString();
+                values[i] = val;
                 i++;
             }
+            SensorTX data = new SensorTX(ev.Sensor.Type.ToString(), ev.Timestamp, values);
+            string json = JsonSerializer.Serialize(data);
+            if (transmit) Connect.Transmit(Encoding.ASCII.GetBytes(json));
+        }
 
+        class SensorTX
+        {
+            public string sensorType { get; set; }
+            public long time { get; set; }
+            public float[] values { get; set; }
+            public SensorTX(string _sensorType, long _time, float[] _values)
+            {
+                sensorType = _sensorType;
+                time = _time;
+                values = _values;
+            }
         }
     }
 }

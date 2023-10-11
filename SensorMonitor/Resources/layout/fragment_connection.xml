@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:orientation="vertical"  
+    android:layout_width="match_parent"  
+    android:layout_height="match_parent"  
+    android:padding="30dp"
+    android:gravity="center"
+    android:background="#DCDCDC">  
 
+    <TextView           
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:layout_marginBottom="30dp"
+        android:gravity="center" 
+        android:textSize="16sp"
+        android:text="Connect to Server" />  
 
-    <EditText
-        android:inputType="number"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+    <EditText  
         android:id="@+id/editIp"
-        android:hint="Введите Ip сервера"/>
-
-
-    <EditText
-        android:inputType="number"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"  
         android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:inputType="date"
+        android:hint="IP Address" />
+    
+    <EditText  
         android:id="@+id/editPort"
-        android:hint="Введите Port сервера"/>   
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
+        android:inputType="number"
+        android:hint="Port"
+        android:text="5656"/>  
 
-
-    <Button
-        android:layout_width="300dp"
+    <Button  
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"  
         android:layout_height="60dp"
-        android:text="@string/title_buttonConnect"
-        android:id="@+id/buttonConnect"
-        android:onClick="Connect"/>    
+        android:text="Connect" />  
 
-</LinearLayout>
+</LinearLayout>  

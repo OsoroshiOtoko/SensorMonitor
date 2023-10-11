@@ -7,4 +7,5 @@
 	<color name="textPrimary">#FFFFFF</color>
 	<color name="textBlack">#000000</color>
 	<color name="isFavorite">#FFFF00</color>
+	<color name="listItem">#4682B4</color>
 </resources>

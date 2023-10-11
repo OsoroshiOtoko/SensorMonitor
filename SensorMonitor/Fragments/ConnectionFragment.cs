@@ -13,20 +13,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SensorMonitor;
-using SensorMonitor.Services;
 using Android.Hardware;
-
+using SensorMonitor.App;
 
 namespace SensorMonitor.Fragments
 {
     public class ConnectionFragment : Fragment
     {          
-
-
-        public ConnectionFragment() 
-        {
-            
-        }
 
 
         public override void OnCreate(Bundle savedInstanceState)
@@ -38,14 +31,12 @@ namespace SensorMonitor.Fragments
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
 
-            View view = inflater.Inflate(Resource.Layout.fragment_connection, container, false);            
-
+            View view = inflater.Inflate(Resource.Layout.fragment_connection, container, false);
+            Button btn = view.FindViewById<Button>(Resource.Id.btnConnect);
+            Connect connect = new Connect(view);
             return view;
-        }
-        
+        }     
 
-
-
-        
+                
     }
 }

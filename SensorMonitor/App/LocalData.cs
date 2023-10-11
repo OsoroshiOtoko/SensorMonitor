@@ -1,11 +1,11 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Hardware;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using SensorMonitor.Model;
-using SensorMonitor.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +13,12 @@ using System.Text;
 
 namespace SensorMonitor.App
 {
-    internal class LocalData
+    internal class LocalData : Application
     {
         internal static List<MySensor> mySensorList = new List<MySensor>();
-        MySensorJSON JSON = new MySensorJSON();
-        SensorData sensorData = new SensorData();
-        
+        private MySensorJSON JSON = new MySensorJSON();
 
+        
         public void loadData()
         {
             mySensorList.Clear();
@@ -27,9 +26,11 @@ namespace SensorMonitor.App
 
             if (read == null)
             {
-                foreach (var _sensor in sensorData.GetSensors())
+                SensorManager sensorManager = Context.GetSystemService(SensorService) as SensorManager;
+                List<Sensor> sensors = new List<Sensor>(sensorManager.GetSensorList(SensorType.All));
+                foreach (var sensor in sensors)
                 {
-                    mySensorList.Add(new MySensor(_sensor.Name, _sensor.Type));
+                    mySensorList.Add(new MySensor(sensor.Name, sensor.Type));
                 }
             }
             else mySensorList = read;
