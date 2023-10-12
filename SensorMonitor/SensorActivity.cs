@@ -104,7 +104,7 @@ namespace SensorMonitor
             power.Text = "Sensor Power: " + sensor.Power.ToString();
 
             button = FindViewById<ToggleButton>(Resource.Id.buttonTransfer);
-            if (!Connection.isConnected) button.Enabled = false;
+            if (!Connect.isConnected) button.Enabled = false;
             button.Click += (sender, ev) => 
             {
                 ToggleButton btn = sender as ToggleButton;

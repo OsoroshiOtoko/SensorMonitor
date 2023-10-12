@@ -71,7 +71,6 @@
     <Compile Include="App\MySensorJSON.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Adapters\SensorListAdapter.cs" />
-    <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\MySensor.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

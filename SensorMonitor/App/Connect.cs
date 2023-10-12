@@ -18,56 +18,52 @@ namespace SensorMonitor.App
     {
         private EditText editIp, editPort;
         private Button btnConnect;
-        private TcpClient client;
+        private static TcpClient client;
+        internal static bool isConnected = false;
 
         public Connect(View view)
         {
-            client = new TcpClient();
             editIp = view.FindViewById<EditText>(Resource.Id.editIp);
             editPort = view.FindViewById<EditText>(Resource.Id.editPort);
             btnConnect = view.FindViewById<Button>(Resource.Id.btnConnect);
-            if(Connection.isConnected) btnConnect.Text = "Disconnect";
+            if(isConnected) btnConnect.Text = "Disconnect";
             btnConnect.Click += async delegate
             {
-                if (!Connection.isConnected)
+                if (!isConnected)
                 {
                     try
                     {
+                        client = new TcpClient();
                         await client.ConnectAsync(editIp.Text, Convert.ToInt32(editPort.Text));
-                        if (client.Connected)
-                        {
-                            Connection.Instance.client = client;
-                            Toast.MakeText(Context, "Client connected to server!", ToastLength.Short).Show();
-                            btnConnect.Text = "Disconnect";
-                        }
-                        else
-                        {
-                            Toast.MakeText(Context, "Connection feild!", ToastLength.Short).Show();
-                        }
+
+                        Toast.MakeText(Context, "Client connected to server!", ToastLength.Short).Show();
+                        btnConnect.Text = "Disconnect";
+                        isConnected = true;
+
                     }
                     catch (Exception ex)
                     {
                         Toast.MakeText(Context, "Connection feild!", ToastLength.Short).Show();
-                        Toast.MakeText(Context, "" + ex, ToastLength.Short).Show();
+                        Toast.MakeText(Context, ex.Message, ToastLength.Short).Show();
                     }
                 }
                 else
                 {
-                    Connection.Instance.client.Close();
+                    client.Close();
                     Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
                     btnConnect.Text = "Connect";
+                    isConnected = false;
                 }
             };
         }
 
         public static void Transmit(byte[] buffer)
         {
-            if (Connection.isConnected)
+            if (client.Connected)
             {
                 int bufferLength = buffer.Length;
                 byte[] lengthBytes = BitConverter.GetBytes(bufferLength);
                 NetworkStream stream;
-                var client = Connection.Instance.client;
                 stream = client.GetStream();
 
                 stream.Write(lengthBytes, 0, lengthBytes.Length);
