@@ -4,13 +4,16 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Java.Nio;
 using SensorMonitor.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SensorMonitor.App
 {
@@ -26,7 +29,8 @@ namespace SensorMonitor.App
             editIp = view.FindViewById<EditText>(Resource.Id.editIp);
             editPort = view.FindViewById<EditText>(Resource.Id.editPort);
             btnConnect = view.FindViewById<Button>(Resource.Id.btnConnect);
-            if(isConnected) btnConnect.Text = "Disconnect";
+            if (isConnected) btnConnect.Text = "Disconnect";
+            else btnConnect.Text = "Connect";
             btnConnect.Click += async delegate
             {
                 if (!isConnected)
@@ -57,18 +61,49 @@ namespace SensorMonitor.App
             };
         }
 
-        public static void Transmit(byte[] buffer)
-        {
-            if (client.Connected)
-            {
-                int bufferLength = buffer.Length;
-                byte[] lengthBytes = BitConverter.GetBytes(bufferLength);
-                NetworkStream stream;
-                stream = client.GetStream();
 
-                stream.Write(lengthBytes, 0, lengthBytes.Length);
-                stream.Write(buffer, 0, buffer.Length);
+        public static void Transmit(byte[] bytes, bool constLenght)
+        { 
+            byte[] buffer = bytes;
+            if (client != null && client.Connected)
+            {
+                if(!constLenght) TransmitLenght(buffer);
+
+                try
+                {
+                    client.GetStream().Write(buffer, 0, buffer.Length);
+                }
+                catch
+                {
+                    client.Close();
+                    Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
+                    isConnected = false;
+                }
             }
+            else Toast.MakeText(Context, "Client not connected!", ToastLength.Short).Show();
+        }
+
+        
+
+        public static void TransmitLenght(byte[] bytes)
+        {
+            int bufferLength = bytes.Length;
+            byte[] lengthBytes = BitConverter.GetBytes(bufferLength);
+
+            try { client.GetStream().Write(lengthBytes, 0, lengthBytes.Length); }
+            catch 
+            {
+                client.Close();
+                Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
+                isConnected = false;
+            }
+        }
+
+        public static string FloatJSON(float[] array)
+        {
+            string[] valStr = array.Select(x => x.ToString("0.00", CultureInfo.InvariantCulture)).ToArray();
+            string json = "[" + string.Join(", ", valStr) + "]";
+            return json;
         }
     }
 }

@@ -9,64 +9,67 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace SensorMonitor.Model
 {
     public class MySensor
     {
-        public string name { get; set; }
-        public SensorType type { get; set; }
+        public string sensorName { get; set; }
+        public SensorType sensorType { get; set; }
+
+        [JsonIgnore]
         public bool favorite { get; set; }
 
         public MySensor()
         {
-            name = "name";
-            type = default;
+            sensorName = "name";
+            sensorType = default;
             favorite = false;
         }
 
-        public MySensor(string _name, SensorType _type, bool _fav)
+        public MySensor(string name, SensorType type, bool fav)
         {
 
-            name = _name;
-            type = _type;
-            favorite = _fav;
+            sensorName = name;
+            sensorType = type;
+            favorite = fav;
         }
 
-        public MySensor(string _name, SensorType _type)
+        public MySensor(string name, SensorType type)
         {
 
-            name = _name;
-            type = _type;
+            sensorName = name;
+            sensorType = type;
             favorite = false;
         }
 
-        public MySensor(string _name)
+        public MySensor(string name)
         {
 
-            name = _name;
-            type = default;
+            sensorName = name;
+            sensorType = default;
             favorite = false;
         }
 
         public string getName()
         {
-            return name;
+            return sensorName;
         }
 
-        public void setName(string _name)
+        public void setName(string name)
         {
-            name = _name;
+            sensorName = name;
         }
 
         public SensorType getType()
         {
-            return type;
+            return sensorType;
         }
 
-        public void setType(SensorType _type)
+        public void setType(SensorType type)
         {
-            type = _type;
+            sensorType = type;
         }
 
         public bool isFavorite()

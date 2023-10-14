@@ -3,7 +3,9 @@ using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Hardware;
+using Android.Icu.Number;
 using Android.OS;
+using Android.Renderscripts;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
@@ -12,6 +14,8 @@ using AndroidX.Activity;
 using AndroidX.AppCompat.App;
 using AndroidX.AppCompat.View.Menu;
 using AndroidX.Core.View;
+using Java.Nio;
+using Kotlin;
 using SensorMonitor.App;
 using SensorMonitor.Fragments;
 using SensorMonitor.Model;
@@ -19,9 +23,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using static Java.Util.Jar.Attributes;
 using Toolbar = AndroidX.AppCompat.Widget.Toolbar;
@@ -32,9 +38,11 @@ namespace SensorMonitor
     internal class SensorActivity : AppCompatActivity, ISensorEventListener
     {
         private string nameInit;
-        private bool transmit = false;
-        //private float[] values;
         private int[] id;
+
+        private static float[] values;
+
+
 
         private TextView type, version, power;
         private ToggleButton button;
@@ -55,32 +63,47 @@ namespace SensorMonitor
 
             if (nameInit != null)
             {
-                mySensor = LocalData.mySensorList.Find(x => x.name == nameInit);
+                mySensor = LocalData.mySensorList.Find(x => x.sensorName == nameInit);
                 sensor = sensorManager.GetDefaultSensor(mySensor.getType());
             }
 
-            
-
-           
 
             SetContentView(Resource.Layout.activity_sensor);
 
             InitToolbar();
-            if (sensor != null) InitView();
+            if (sensor != null)
+            {
+                InitView();
+                sensorManager.RegisterListener(this, sensor, SensorDelay.Normal);
+            }
+
+            if (Connect.isConnected)
+            {
+                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getName())), false);
+                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getType().ToString())), false);
+            }
         }
 
         protected override void OnResume()
         {
             base.OnResume();
 
-            if (sensor != null) sensorManager.RegisterListener(this, sensor, SensorDelay.Normal);
+            
         }
+        
 
         protected override void OnPause()
         {
             base.OnPause();
             //localData.saveData();
+            //sensorManager.UnregisterListener(this);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
             sensorManager.UnregisterListener(this);
+            Connect.Transmit(new byte[1], true);
         }
 
         public void InitToolbar()
@@ -105,10 +128,24 @@ namespace SensorMonitor
 
             button = FindViewById<ToggleButton>(Resource.Id.buttonTransfer);
             if (!Connect.isConnected) button.Enabled = false;
+
             button.Click += (sender, ev) => 
             {
                 ToggleButton btn = sender as ToggleButton;
-                transmit = btn.Checked;
+
+                if (btn.Checked)
+                {
+                    Task.Run(async () =>
+                    {
+                        while (btn.Checked)
+                        {
+                            float[] val = values;
+
+                            Connect.Transmit(Encoding.ASCII.GetBytes(Connect.FloatJSON(val)), false);
+                            await Task.Delay(10);
+                        }
+                    });
+                }
             };          
         }
         
@@ -164,12 +201,12 @@ namespace SensorMonitor
                     //Toast.MakeText(this, "Add to Favorite", ToastLength.Short).Show();
                     if (mySensor.isFavorite())
                     {
-                        LocalData.mySensorList.Find(x => x.name == mySensor.getName()).removeFavorite();
+                        LocalData.mySensorList.Find(x => x.sensorName == mySensor.getName()).removeFavorite();
                         imgFavorite.SetColorFilter(Color.White, PorterDuff.Mode.SrcAtop);
                     }
                     else
                     {
-                        LocalData.mySensorList.Find(x => x.name == mySensor.getName()).addFavorite();
+                        LocalData.mySensorList.Find(x => x.sensorName == mySensor.getName()).addFavorite();
                         imgFavorite.SetColorFilter(Color.Yellow, PorterDuff.Mode.SrcAtop);
                     }
                     return true;
@@ -187,10 +224,14 @@ namespace SensorMonitor
         {
             TextView textView;
             var valuesCount = ev.Values.Count > 4 ? 4 : ev.Values.Count;
-            if (id == null) InitValueView(valuesCount);
+            if (id == null)
+            {
+                InitValueView(valuesCount);
+                values = new float[valuesCount];
+            }
 
             int i = 0;
-            float[] values = new float[valuesCount];
+            
             while (i < valuesCount)
             {
                 float val;
@@ -200,22 +241,6 @@ namespace SensorMonitor
                 values[i] = val;
                 i++;
             }
-            SensorTX data = new SensorTX(ev.Sensor.Type.ToString(), ev.Timestamp, values);
-            string json = JsonSerializer.Serialize(data);
-            if (transmit) Connect.Transmit(Encoding.ASCII.GetBytes(json));
-        }
-
-        class SensorTX
-        {
-            public string sensorType { get; set; }
-            public long time { get; set; }
-            public float[] values { get; set; }
-            public SensorTX(string _sensorType, long _time, float[] _values)
-            {
-                sensorType = _sensorType;
-                time = _time;
-                values = _values;
-            }
-        }
+        }        
     }
 }
