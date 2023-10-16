@@ -62,42 +62,53 @@ namespace SensorMonitor.App
         }
 
 
-        public static void Transmit(byte[] bytes, bool constLenght)
-        { 
+        public static void Transmit(byte[] bytes)
+        {
+            NetworkStream stream = client.GetStream();
             byte[] buffer = bytes;
+
+
             if (client != null && client.Connected)
             {
-                if(!constLenght) TransmitLenght(buffer);
+                int bufferLength = bytes.Length;
+                byte[] lengthBytes = BitConverter.GetBytes(bufferLength);
+                byte[] b = new byte[1];
 
                 try
                 {
-                    client.GetStream().Write(buffer, 0, buffer.Length);
+                    if (bytes.Length == 1 && bytes[0] == 2)
+                    {
+                        stream.WriteByte(2);
+                        return;
+                    }
+                    stream.WriteByte(7);
+                    stream.Read(b, 0, 1);
+                    switch (b[0])
+                    {
+                        case 8: //server can read
+                            {
+                                stream.Write(lengthBytes, 0, lengthBytes.Length);
+                                stream.Write(buffer, 0, buffer.Length);
+                            } break;
+
+                        case 1: //server close
+                            {
+                                stream.Dispose();
+                                client.Close();
+                                Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
+                                isConnected = false;
+                            } break;
+                    }
                 }
                 catch
                 {
-                    client.Close();
-                    Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
-                    isConnected = false;
+                    return;                    
                 }
             }
             else Toast.MakeText(Context, "Client not connected!", ToastLength.Short).Show();
         }
 
         
-
-        public static void TransmitLenght(byte[] bytes)
-        {
-            int bufferLength = bytes.Length;
-            byte[] lengthBytes = BitConverter.GetBytes(bufferLength);
-
-            try { client.GetStream().Write(lengthBytes, 0, lengthBytes.Length); }
-            catch 
-            {
-                client.Close();
-                Toast.MakeText(Context, "Disconnect!", ToastLength.Short).Show();
-                isConnected = false;
-            }
-        }
 
         public static string FloatJSON(float[] array)
         {

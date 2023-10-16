@@ -51,7 +51,8 @@ namespace SensorMonitor
         private SensorManager sensorManager;
         private Sensor sensor;
         private LocalData localData = new LocalData();
-        
+
+
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -79,8 +80,8 @@ namespace SensorMonitor
 
             if (Connect.isConnected)
             {
-                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getName())), false);
-                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getType().ToString())), false);
+                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getName())));
+                Connect.Transmit(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(mySensor.getType().ToString())));
             }
         }
 
@@ -103,7 +104,7 @@ namespace SensorMonitor
         {
             base.OnDestroy();
             sensorManager.UnregisterListener(this);
-            Connect.Transmit(new byte[1], true);
+            if (Connect.isConnected) Connect.Transmit(new byte[] { 2 });
         }
 
         public void InitToolbar()
@@ -141,8 +142,8 @@ namespace SensorMonitor
                         {
                             float[] val = values;
 
-                            Connect.Transmit(Encoding.ASCII.GetBytes(Connect.FloatJSON(val)), false);
-                            await Task.Delay(10);
+                            Connect.Transmit(Encoding.ASCII.GetBytes(Connect.FloatJSON(val)));
+                            await Task.Delay(1);
                         }
                     });
                 }
